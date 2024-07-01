@@ -1,3 +1,20 @@
+/*
+    Copyright (C) 2024  Jan Kuchař <jan.kuchar.2003@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 using System;
 using System.Collections;
 using System.Linq;
@@ -6,6 +23,8 @@ using Avalonia.Interactivity;
 using MsBox.Avalonia;
 using SongBook.Data;
 using SongBook.Entity;
+using SongBook.Constant;
+using System.Diagnostics;
 
 namespace SongBook.Views;
 
@@ -52,6 +71,15 @@ public partial class MainWindow : Window
         ButtonEditSong.IsEnabled = show;
         ButtonOpenSong.IsEnabled = show;
         ButtonRemoveSong.IsEnabled = show;
+    }
+    public async void ShowInfo(object sender, RoutedEventArgs args)
+    {
+        var messagebox = MessageBoxManager.GetMessageBoxStandard("Informace o programu", AppInfo.Info, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.None, WindowStartupLocation.CenterScreen);
+        await messagebox.ShowAsync();
+    }
+    public void ShowSourceCode(object sender, RoutedEventArgs args)
+    {
+        Process.Start(new ProcessStartInfo(AppInfo.SourceCodeURL) { UseShellExecute = true });
     }
     public void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs args)
     {

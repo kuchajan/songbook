@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (C) 2024  Jan Kuchař <jan.kuchar.2003@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -15,16 +15,31 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+using System.Configuration;
+using System.Data;
+using System.IO;
+using System.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SongBook.Entity;
+namespace SongBook.Constant;
 
-public interface IDTOable<TDTO>
+class AppPath
 {
-    public TDTO createDTO();
-    public void update(TDTO updateFrom);
+	public static readonly string AppRootPath;
+	public static readonly string SoundfilesPath;
+
+	static AppPath()
+	{
+		var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		AppRootPath = $"{appDataPath}/kuchajan/songbook";
+		if (!Directory.Exists(AppRootPath))
+		{
+			Directory.CreateDirectory(AppRootPath);
+		}
+		SoundfilesPath = $@"{AppRootPath}/soundfiles";
+		if (!Directory.Exists(SoundfilesPath))
+		{
+			Directory.CreateDirectory(SoundfilesPath);
+		}
+	}
 }

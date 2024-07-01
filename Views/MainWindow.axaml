@@ -7,6 +7,10 @@
         Title="Zpěvník">
     <DockPanel>
         <Menu DockPanel.Dock="Top" FontSize="14">
+            <MenuItem Header="O Programu">
+                <MenuItem Header="Info" Click="ShowInfo"/>
+                <MenuItem Header="Zdrojový kód" Click="ShowSourceCode"/>
+            </MenuItem>
             <MenuItem Header="Sdílení">
                 <MenuItem Header="Importovat"/>
                 <MenuItem Header="Exportovat"/>
