@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace songbook;
+namespace SongBook;
 
 public partial class MainWindow : Window
 {
