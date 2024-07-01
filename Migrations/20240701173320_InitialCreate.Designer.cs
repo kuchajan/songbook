@@ -7,7 +7,7 @@ using SongBook.Data;
 
 #nullable disable
 
-namespace songbook.Migrations
+namespace SongBook.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20240701173320_InitialCreate")]

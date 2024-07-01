@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SongBook.Views.MainWindow"
+        Title="Zpěvník">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" FontSize="14">
+            <MenuItem Header="Sdílení">
+                <MenuItem Header="Importovat"/>
+                <MenuItem Header="Exportovat"/>
+            </MenuItem>
+        </Menu>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>    
+            <ListBox x:Name="ListBoxSongList" FontSize="24" Grid.Column="0" SelectionChanged="ListBox_SelectionChanged"></ListBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="ButtonNewSong" Content="Nová písnička" Click="ButtonNewSongClick" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="210" Height="40" Grid.Row="0" FontSize="24"/>
+                <Button x:Name="ButtonOpenSong" Content="Otevřít písničku" Click="ButtonOpenSongClick" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="210" Height="40" Grid.Row="1" FontSize="24"/>
+                <Button x:Name="ButtonEditSong" Content="Upravit písničku" Click="ButtonEditSongClick" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="210" Height="40" Grid.Row="2" FontSize="24"/>
+                <Button x:Name="ButtonRemoveSong" Content="Smazat písničku" Click="ButtonDeleteSongClick" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="210" Height="40" Grid.Row="3" FontSize="24"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

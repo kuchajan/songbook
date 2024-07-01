@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace songbook.Migrations
+namespace SongBook.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

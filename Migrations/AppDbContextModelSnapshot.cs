@@ -6,7 +6,7 @@ using SongBook.Data;
 
 #nullable disable
 
-namespace songbook.Migrations
+namespace SongBook.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

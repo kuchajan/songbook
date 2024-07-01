@@ -1,0 +1,122 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Class="SongBook.Views.NewSongWindow"
+        Title="Nová písnička">
+  <Grid Margin="10">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="50"/>
+      <RowDefinition Height="50"/>
+      <RowDefinition Height="50"/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition Height="50"/>
+    </Grid.RowDefinitions>
+
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+      <Label Content="Název písničky:"
+             VerticalAlignment="Center"
+             Grid.Column="0"
+             FontSize="24"/>
+      <TextBox x:Name="TextBoxTitle"
+               TextWrapping="Wrap"
+               Text=""
+               VerticalAlignment="Center"
+               Grid.Column="1"
+               Height="40"
+               FontSize="24"/>
+    </Grid>
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="110"/>
+      </Grid.ColumnDefinitions>
+      <Label Content="Zvukový soubor:"
+             VerticalAlignment="Center"
+             Grid.Column="0"
+             FontSize="24"/>
+      <Button x:Name="ButtonGetFile"
+              Content="Vybrat"
+              Grid.Column="1"
+              Height="40"
+              Click="ButtonGetFileClick"
+              FontSize="24"/>
+      <Label x:Name="LabelFilePath"
+             Content="Žádný soubor nevybrán"
+             VerticalAlignment="Center"
+             Grid.Column="2"
+             FontSize="24"/>
+      <Button x:Name="ButtonRemoveFile"
+              Content="Odebrat"
+              Grid.Column="3"
+              Height="40"
+              Click="ButtonRemoveFileClick"
+              FontSize="24"/>
+    </Grid>
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Label Content="Žánry písníčky:"
+             VerticalAlignment="Center"
+             Grid.Column="0"
+             FontSize="24"/>
+      <ListBox x:Name="CheckedListBoxGenres" VerticalAlignment="Center" Grid.Column="1" Height="40" FontSize="24"></ListBox> <!--Todo: Make own CheckedListBox-->
+    </Grid>
+    <Grid Grid.Row="3">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Label Content="Text písničky:"
+             VerticalAlignment="Top"
+             Grid.Column="0"
+             FontSize="24"/>
+      <TextBox x:Name="TextBoxLyrics"
+               TextWrapping="Wrap"
+               Text=""
+               AcceptsReturn="True"
+               VerticalAlignment="Stretch"
+               Grid.Column="1"
+               FontSize="24"/>
+    </Grid>
+
+    <Grid Grid.Row="4">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Label Content="Komentář:"
+             VerticalAlignment="Top"
+             Grid.Column="0"
+             FontSize="24"/>
+      <TextBox x:Name="TextBoxComments"
+               TextWrapping="Wrap"
+               Text=""
+               AcceptsReturn="True"
+               VerticalAlignment="Stretch"
+               Grid.Column="1"
+               FontSize="24"/>
+    </Grid>
+    <Button x:Name="ButtonSaveSong"
+            Grid.Row="5"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
+            Width="180"
+            Height="40"
+            Content="Uložit písničku"
+            Click="ButtonSaveSongClick"
+            FontSize="24"/>
+  </Grid>
+</Window>

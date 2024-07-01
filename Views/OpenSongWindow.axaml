@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SongBook.Views.OpenSongWindow"
+        Title="Otevřít písničku">
+  <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label x:Name="LabelSongName" Content="Název" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="48" FontWeight="Bold" FontStyle="Normal"/>
+        <Button x:Name="ButtonPlay" Content="Pustit hudbu" Grid.Row="1" HorizontalAlignment="Center" Height="48" Width="180" Click="ButtonPlayClick" IsEnabled="False" FontSize="24"/>
+        <ScrollViewer Grid.Row="2">
+            <TextBlock x:Name="TextBlockLyrics" Text="Text" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="24"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
