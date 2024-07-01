@@ -6,20 +6,20 @@ using System;
 
 namespace SongBook.Constant;
 
-class Path
+class AppPath
 {
-	public static readonly string AppPath;
+	public static readonly string AppRootPath;
 	public static readonly string SoundfilesPath;
 
-	static Path()
+	static AppPath()
 	{
 		var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-		AppPath = $"{appDataPath}/kuchajan/songbook";
-		if (!Directory.Exists(AppPath))
+		AppRootPath = $"{appDataPath}/kuchajan/songbook";
+		if (!Directory.Exists(AppRootPath))
 		{
-			Directory.CreateDirectory(AppPath);
+			Directory.CreateDirectory(AppRootPath);
 		}
-		SoundfilesPath = $@"{AppPath}/soundfiles";
+		SoundfilesPath = $@"{AppRootPath}/soundfiles";
 		if (!Directory.Exists(SoundfilesPath))
 		{
 			Directory.CreateDirectory(SoundfilesPath);
