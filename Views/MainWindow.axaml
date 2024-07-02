@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="220"/>
             </Grid.ColumnDefinitions>    
-            <ListBox x:Name="ListBoxSongList" FontSize="24" Grid.Column="0" SelectionChanged="ListBox_SelectionChanged"></ListBox>
+            <ListBox x:Name="ListBoxSongs" FontSize="24" Grid.Column="0" SelectionChanged="ListBoxSongsSelectionChanged"></ListBox>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>

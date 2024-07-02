@@ -25,6 +25,9 @@ using SongBook.Data;
 using SongBook.Entity;
 using SongBook.Constant;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
+using Avalonia.Controls.Templates;
+using Avalonia.Data;
 
 namespace SongBook.Views;
 
@@ -33,44 +36,35 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        var template = new FuncDataTemplate<Song>((value, namescope) => new TextBlock
+        {
+            [!TextBlock.TextProperty] = new Binding("Title")
+        });
+        ListBoxSongs.ItemTemplate = template;
+        UpdateSongList();
+        UpdateButtonAvailability();
     }
 
     private Song? GetSelectedSong()
     {
-        // todo: replace with actual get
-        return new Song
-        {
-            Id = -1,
-            Title = "Moje úžasná písnička",
-            Genres = [],
-            Lyrics = "Můj úžasnej text písničky"
-        };
+        return (Song?)ListBoxSongs.SelectedItem;
     }
     private void UpdateSongList()
     {
-        ListBoxSongList.Items.Clear();
         using (var context = new AppDbContext())
         {
-            foreach (var song in context.Songs.ToList())
-            {
-                ListBoxSongList.Items.Add(new ListBoxItem
-                {
-                    Content = song.Title
-                });
-            }
+            var songs = context.Songs.ToList();
+            ListBoxSongs.ItemsSource = new ObservableCollection<Song>(songs);
         }
-        
-        // todo: get songs from db
-        // todo: add to listbox
     }
 
     private void UpdateButtonAvailability()
     {
-        IList? list = ListBoxSongList.SelectedItems;
-        bool show = list != null && list.Count == 1;
-        ButtonEditSong.IsEnabled = show;
-        ButtonOpenSong.IsEnabled = show;
-        ButtonRemoveSong.IsEnabled = show;
+        IList? list = ListBoxSongs.SelectedItems;
+        bool selected = list != null && list.Count == 1;
+        ButtonEditSong.IsEnabled = selected;
+        ButtonOpenSong.IsEnabled = selected;
+        ButtonRemoveSong.IsEnabled = selected;
     }
     public async void ShowInfo(object sender, RoutedEventArgs args)
     {
@@ -81,7 +75,7 @@ public partial class MainWindow : Window
     {
         Process.Start(new ProcessStartInfo(AppInfo.SourceCodeURL) { UseShellExecute = true });
     }
-    public void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs args)
+    public void ListBoxSongsSelectionChanged(object sender, SelectionChangedEventArgs args)
     {
         UpdateButtonAvailability();
     }
@@ -93,41 +87,47 @@ public partial class MainWindow : Window
         {
             return;
         }
-        // save new song
+        using (var context = new AppDbContext())
+        {
+            context.Songs.Add(new Song
+            {
+                Title = result.Title,
+                AudioPath = result.AudioPath,
+                Genres = context.Genres.AsQueryable().Where(g => result.GenresIds.Contains(g.Id)).ToList(),
+                Lyrics = result.Lyrics,
+                Comments = result.Comments
+            });
+            context.SaveChanges();
+        }
+        UpdateSongList();
     }
     public void ButtonOpenSongClick(object sender, RoutedEventArgs args)
     {
-        var song = GetSelectedSong();
-        if (song == null)
-        {
-            throw new Exception("Song can't be null");
-        }
+        var song = GetSelectedSong() ?? throw new Exception("Song can't be null");
         var window = new OpenSongWindow(song.createDTO());
         window.Show();
     }
     public async void ButtonEditSongClick(object sender, RoutedEventArgs args)
     {
-        var song = GetSelectedSong();
-        if (song == null)
-        {
-            throw new Exception("Song can't be null");
-        }
+        var song = GetSelectedSong() ?? throw new Exception("Song can't be null");
         var window = new NewSongWindow(song.createDTO());
         var result = await window.ShowDialog<SongDTO?>(this);
         if(result == null)
         {
             return;
         }
-        // save the edit
+        using (var context = new AppDbContext())
+        {
+            var dbSong = context.Songs.Find(song.Id) ?? throw new Exception($"Song with id {song.Id} was not found");
+            dbSong.update(result);
+            context.SaveChanges();
+        }
+        UpdateSongList();
     }
     public async void ButtonDeleteSongClick(object sender, RoutedEventArgs args)
     {
-        Song? song = GetSelectedSong();
-        if (song == null)
-        {
-            return;
-        }
-        var warningbox = MessageBoxManager.GetMessageBoxStandard("Upozornění", $"Jste si jistí, že chcete smazat písničku {song.Title}", MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning, WindowStartupLocation.CenterScreen);
+        var song = GetSelectedSong() ?? throw new Exception("Song can't be null");
+        var warningbox = MessageBoxManager.GetMessageBoxStandard("Upozornění", $"Jste si jistí, že chcete smazat písničku {song.Title}?", MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning, WindowStartupLocation.CenterScreen);
         var result = await warningbox.ShowAsync();
         if (result != MsBox.Avalonia.Enums.ButtonResult.Yes)
         {

@@ -29,7 +29,7 @@ public class Song : IDTOable<SongDTO>
     public int Id { get; set; }
     public required string Title { get; set; }
     public string? AudioPath { get; set; }
-    public required List<Genre> Genres { get; set; }
+    public List<Genre>? Genres { get; set; }
     public required string Lyrics { get; set; }
     public string? Comments { get; set; }
 
@@ -39,7 +39,7 @@ public class Song : IDTOable<SongDTO>
         {
             Title = Title,
             AudioPath = AudioPath,
-            GenresIds = Genres.AsEnumerable().Select(g => g.Id).ToList(),
+            GenresIds = Genres != null ? Genres.AsEnumerable().Select(g => g.Id).ToList() : [],
             Lyrics = Lyrics,
             Comments = Comments
         };

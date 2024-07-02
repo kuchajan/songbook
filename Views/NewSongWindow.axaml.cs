@@ -74,6 +74,11 @@ public partial class NewSongWindow : Window
 
     public void ButtonSaveSongClick(object sender, RoutedEventArgs args)
     {
+        _song.Title = TextBoxTitle.Text ?? _song.Title;
+        // File was already updated
+        //todo: CheckedListBoxGenres
+        _song.Lyrics = TextBoxLyrics.Text ?? _song.Lyrics;
+        _song.Comments = TextBoxComments.Text;
         Close(_song);
     }
 }
