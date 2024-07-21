@@ -16,10 +16,15 @@
 */
 
 using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
+using SongBook.Constant;
 using SongBook.Entity;
 
 namespace SongBook.Views;
@@ -27,7 +32,7 @@ namespace SongBook.Views;
 public partial class NewSongWindow : Window
 {
     private SongDTO _song;
-    private static readonly string NO_FILE = "Žádný soubor nevybrán";
+    private const string NO_FILE = "Žádný soubor nevybrán";
     public NewSongWindow()
     {
         _song = new SongDTO
@@ -58,17 +63,73 @@ public partial class NewSongWindow : Window
     }
     private void UpdateFileStuff()
     {
-        var isNull = _song.AudioPath == null;
-        LabelFilePath.Content = isNull ? NO_FILE : _song.AudioPath;
-        ButtonRemoveFile.IsEnabled = !isNull;
+        var isNotNull = _song.AudioPath != null;
+        LabelFilePath.Content = isNotNull ? _song.AudioPath : NO_FILE;
+        ButtonRemoveFile.IsEnabled = isNotNull;
     }
 
-    public void ButtonGetFileClick(object sender, RoutedEventArgs args)
+    private async Task<IStorageFile?> GetFile()
     {
+        var toplevel = GetTopLevel(this) ?? throw new Exception("Top level cannot be null");
+        var audioFileFilter = new FilePickerFileType("Audio")
+        {
+            Patterns = ["*.mp3;*.wav;*.ogg;*.m4a;*.flac;*.wma;*.aac;*.midi"], // there may be more
+            AppleUniformTypeIdentifiers = ["public.audio"],
+            MimeTypes = ["audio/*"]
+        };
+        var files = await toplevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Vyber písničku",
+            FileTypeFilter = [audioFileFilter, FilePickerFileTypes.All],
+            AllowMultiple = false
+        });
+        if (files == null || files.Count == 0)
+        {
+            return null;
+        }
+        if (files.Count != 1) 
+        {
+            throw new Exception("Unexpected count of files");
+        }
+        return files[0];
+    }
+
+    private void DeleteAudioFile()
+    {
+        if (_song.AudioPath == null)
+        {
+            return;
+        }
+        File.Delete(Path.Join(AppPath.SoundfilesPath, _song.AudioPath));
+        _song.AudioPath = null;
+    }
+
+    public async void ButtonGetFileClick(object sender, RoutedEventArgs args)
+    {
+        var file = await GetFile();
+        if (file == null)
+        {
+            return;
+        }
+        if(_song.AudioPath != null)
+        {
+            DeleteAudioFile();
+        }
+
+        var guid = Guid.NewGuid();
+        var newFileName = string.Concat(guid.ToString("N"), ".", file.Name.Split('.').Last());
+        using (var source = await file.OpenReadAsync())
+        using (var target = File.Create(Path.Join(AppPath.SoundfilesPath, newFileName)))
+        {
+            source.CopyTo(target);
+        }
+
+        _song.AudioPath = newFileName;
         UpdateFileStuff();
     }
     public void ButtonRemoveFileClick(object sender, RoutedEventArgs args)
     {
+        DeleteAudioFile();
         UpdateFileStuff();
     }
 

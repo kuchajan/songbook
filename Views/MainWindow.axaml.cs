@@ -28,6 +28,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using System.IO;
 
 namespace SongBook.Views;
 
@@ -133,6 +134,8 @@ public partial class MainWindow : Window
         {
             return;
         }
+        
+        File.Delete(Path.Join(AppPath.SoundfilesPath, song.AudioPath));
         using (var context = new AppDbContext())
         {
             context.Songs.Remove(song);

@@ -16,10 +16,13 @@
 */
 
 using System;
+using System.Diagnostics;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using SongBook.Constant;
 using SongBook.Entity;
 
 namespace SongBook.Views;
@@ -45,6 +48,12 @@ public partial class OpenSongWindow : Window
         {
             return;
         }
-        // ...
+        new Process
+        {
+            StartInfo = new ProcessStartInfo(Path.Join(AppPath.SoundfilesPath, _song.AudioPath))
+            {
+                UseShellExecute = true
+            }
+        }.Start();
     }
 }
